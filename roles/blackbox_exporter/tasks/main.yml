@@ -1,0 +1,39 @@
+---
+  - name: Create users prometheus
+    user:
+      name: prometheus
+      create_home: no
+      shell: /bin/false
+  
+  - name: Create directory for prometheus
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: prometheus
+      group: prometheus
+    loop: 
+      - /tmp/blackbox_exporter
+
+  - name: Download And Unzipped Blackbox_exporter
+    unarchive:
+      src: https://github.com/prometheus/blackbox_exporter/releases/download/v{{ version_blackbox_exporter }}/blackbox_exporter-{{ version_blackbox_exporter }}.linux-amd64.tar.gz
+      dest: /tmp/blackbox_exporter
+      remote_src: yes
+
+#  - name: Copy Bin Files From Unzipped to blackbox_exporter
+#    copy: 
+#      src: /tmp/blackbox_exporter/blackbox_exporter-{{ version_blackbox_exporter }}.linux-amd64/{{ item }}
+#      dest: /usr/local/bin/
+#      remote_src: yes
+#      mode: preserve
+#      owner: prometheus
+#      group: prometheus
+#    loop: [ 'blackbox_exporter' ]
+
+#  - name: Create File for Node_exporter Systemd and Start blackbox_exporter
+#    template:
+#      src=templates/blackbox_exporter.service.j2
+#      dest=/etc/systemd/system/blackbox_exporter.service
+#    notify:
+#      - Restart systemd
+#      - Enable blackbox_exporter

@@ -1,0 +1,23 @@
+- name: Restart systemd
+  systemd:
+    daemon_reload: true
+
+- name: Restart grafana
+  systemd:
+    name: grafana-server
+    state: restarted
+
+- name: Start grafana
+  systemd:
+    name: grafana-server
+    state: started
+
+- name: Stop grafana
+  systemd:
+    name: grafana-server
+    state: stopped
+
+- name: Enable grafana
+  systemd:
+    name: grafana-server
+    enabled: yes

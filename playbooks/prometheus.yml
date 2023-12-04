@@ -1,0 +1,22 @@
+- hosts: prometheus
+  become: True
+  become_method: sudo
+  roles:
+    - ./roles/repository
+    - ./roles/update-system
+    - ./roles/time-synchronization
+    - ./roles/prometheus
+    - ./roles/grafana
+    #- ./roles/alertmanager # ? возможно стоит использовать встроенные alert grafana
+    - ./roles/node_exporter
+    #- ./roles/blackbox_exporter
+
+- hosts: all
+  become: True
+  become_method: sudo
+  roles:
+    - ./roles/repository
+    - ./roles/update-system
+    - ./roles/time-synchronization
+    - ./roles/node_exporter
+    #- ./roles/blackbox_exporter

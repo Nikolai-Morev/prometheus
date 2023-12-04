@@ -1,0 +1,32 @@
+  # Добавляем репозитории contrib и non-free
+
+    - name: Configuring Distribution Repositories Debian12
+      template:
+        src: templates/debian12.sources.list.j2
+        dest: /etc/apt/sources.list
+      when: ansible_distribution == "Debian" and ansible_distribution_major_version == "12"
+
+    - name: Configuring Distribution Repositories Debian11
+      template:
+        src: templates/debian11.sources.list.j2
+        dest: /etc/apt/sources.list
+      when: ansible_distribution == "Debian" and ansible_distribution_major_version == "11"
+
+    - name: Configuring Distribution Repositories Debian10
+      template:
+        src: templates/debian10.sources.list.j2
+        dest: /etc/apt/sources.list
+      when: ansible_distribution == "Debian" and ansible_distribution_major_version == "10"
+
+  # Обновляем все пакеты с помощью модуля apt
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+  # Обновляем все пакеты
+    - name: Upgrade all packages on servers
+      apt:
+        upgrade: dist
+        force_apt_get: yes

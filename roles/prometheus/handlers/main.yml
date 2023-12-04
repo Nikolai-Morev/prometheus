@@ -1,0 +1,23 @@
+- name: Restart systemd
+  systemd:
+    daemon_reload: true
+
+- name: Restart prometheus
+  systemd:
+    name: prometheus
+    state: restarted
+
+- name: Start prometheus
+  systemd:
+    name: prometheus
+    state: started
+
+- name: Stop prometheus
+  systemd:
+    name: prometheus
+    state: stopped
+
+- name: Enable prometheus
+  systemd:
+    name: prometheus
+    enabled: yes

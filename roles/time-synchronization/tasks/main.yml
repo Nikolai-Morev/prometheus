@@ -1,0 +1,8 @@
+    - name: Install chrony
+      apt: 
+        name: 
+        - chrony
+        state: present
+        update_cache: yes
+      notify:
+      - enable chrony

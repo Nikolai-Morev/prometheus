@@ -1,0 +1,41 @@
+---
+  - name: Create users prometheus
+    user:
+      name: prometheus
+      create_home: no
+      shell: /bin/false
+  
+  - name: Create directory for prometheus
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: prometheus
+      group: prometheus
+    loop: 
+      - /tmp/node_exporter
+
+  - name: Download And Unzipped Node_exporter
+    unarchive:
+      src: https://github.com/prometheus/node_exporter/releases/download/v{{ version_node_exporter }}/node_exporter-{{ version_node_exporter }}.linux-amd64.tar.gz
+      dest: /tmp/node_exporter
+      creates: /tmp/node_exporter/node_exporter-{{ version_node_exporter }}.linux-amd64
+      remote_src: yes
+
+  - name: Copy Bin Files From Unzipped to Node_exporter
+    copy: 
+      src: /tmp/node_exporter/node_exporter-{{ version_node_exporter }}.linux-amd64/{{ item }}
+      dest: /usr/local/bin/
+      remote_src: yes
+      mode: preserve
+      owner: prometheus
+      group: prometheus
+    loop: [ 'node_exporter' ]
+
+  - name: Create File for Node_exporter Systemd and Start Node_exporter
+    template:
+      src=templates/node_exporter.service.j2
+      dest=/etc/systemd/system/node_exporter.service
+    notify:
+      - Restart systemd
+      - Enable node_exporter
+      - Restart node_exporter

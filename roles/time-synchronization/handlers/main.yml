@@ -1,0 +1,19 @@
+- name: restart chrony
+  systemd:
+    name: chrony
+    state: restarted
+
+- name: start chrony
+  systemd:
+    name: chrony
+    state: started
+
+- name: stop chrony
+  systemd:
+    name: chrony
+    state: stopped
+
+- name: enable chrony
+  systemd:
+    name: chrony
+    enabled: yes
